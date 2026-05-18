@@ -10,10 +10,19 @@ namespace src.Core
         public Random Random { get; }
         public int EncounterCount { get; set; }
 
+        public List<IGameLog> Logs { get; } = new();
+
         public GameContext(Player player)
         {
             Player = player;
             Random = new Random();
+        }
+
+        public void AddLog(IGameLog log)
+        {
+            Logs.Add(log);
+            Console.WriteLine();
+            Console.WriteLine(log.GetMessage());
         }
     }
 }

@@ -5,7 +5,6 @@ namespace src.Entities
 {
     public class Enemy : Entity
     {
-        public string Name { get; }
         public Enemy(string name, int maxHealth, int attack, int defense)
         {
             Name = name;

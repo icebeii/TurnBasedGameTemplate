@@ -9,6 +9,7 @@ namespace src.Entities
         public int Experience { get; private set; }
         public Player()
         {
+            Name = "Player";
             Level = 1;
             Experience = 0;
             Stats = new Stats
@@ -18,6 +19,17 @@ namespace src.Entities
                 Attack = 15,
                 Defense = 5
             };
+        }
+
+        public void PrintPlayerStats()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Player stats:");
+            Console.WriteLine("HP: " + $"{Stats.CurrentHealth}" + "/" + $"{Stats.MaxHealth}");
+            Console.WriteLine("Attack: " + $"{Stats.Attack}");
+            Console.WriteLine("Defense: " + $"{Stats.Defense}");
+            Console.WriteLine("Level: " + $"{Level}");
+            Console.WriteLine("XP: " + $"{Experience}");
         }
     }
 }

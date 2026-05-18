@@ -1,4 +1,5 @@
-﻿using src.Core;
+﻿using src.Combat;
+using src.Core;
 using src.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ namespace src.Encounters
             Console.WriteLine(EnemiesEncountered());
             Console.WriteLine();
             PrintEnemiesHP();
+
+            CombatManager combat = new();
+            combat.HandleCombat(context, Enemies);
         }
 
         private void PrintEnemiesHP()
