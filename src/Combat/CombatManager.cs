@@ -12,14 +12,21 @@ namespace src.Combat
             while (context.Player.IsAlive && enemies.Count > 0)
             {
                 PlayerTurn(context, enemies);
+                
                 RemoveDeadEnemies(enemies);
-
                 if (enemies.Count == 0)
                 {
                     Console.WriteLine("All enemies defeated!");
                     break;
                 }
+                foreach (Enemy enemy in enemies)
+                {
+                    RemoveExpiredEffects(enemy);
+                }
+
                 EnemyTurn(context, enemies);
+                RemoveExpiredEffects(context.Player);
+
                 PrintHP(context.Player, enemies);
             }
         }
@@ -35,14 +42,15 @@ namespace src.Combat
             {
                 case "1":
                     AttackAction attack = new AttackAction();
-                    IGameLog log = attack.PerformAction(context.Player, enemies[0]);
-                    context.AddLog(log);
+                    IGameLog attackLog = attack.PerformAction(context.Player, enemies[0]);
+                    context.AddLog(attackLog);
                     break;
-                    /*
+                    
                 case "2": 
                     DefendAction defend = new DefendAction();
-                    defend.PerformAction(player, null);
-                    break;*/
+                    IGameLog defendLog = defend.PerformAction(context.Player, null);
+                    context.AddLog(defendLog);
+                    break;
 
                 default:
                     return;
@@ -58,6 +66,17 @@ namespace src.Combat
                     AttackAction attack = new AttackAction();
                     IGameLog log = attack.PerformAction(enemy, context.Player);
                     context.AddLog(log); 
+                }
+            }
+        }
+
+        private void RemoveExpiredEffects(Entity entity)
+        {
+            for (int i = 0; i < entity.Effects.Count; i++)
+            {
+                if (entity.Effects[i].IsExpired())
+                {
+                    entity.Effects.RemoveAt(i);
                 }
             }
         }

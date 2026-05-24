@@ -1,4 +1,5 @@
-﻿using System;
+﻿using src.Items;
+using System;
 using System.Collections.Generic;
 
 namespace src.Entities
@@ -7,11 +8,14 @@ namespace src.Entities
     {
         public int Level { get; private set; }
         public int Experience { get; private set; }
+
+        public Inventory Inventory { get; }
         public Player()
         {
             Name = "Player";
             Level = 1;
             Experience = 0;
+            Inventory = new Inventory(5);
             Stats = new Stats
             {
                 MaxHealth = 100,

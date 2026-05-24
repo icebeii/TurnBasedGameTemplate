@@ -1,4 +1,5 @@
 ﻿using src.Core;
+using src.Effects;
 using src.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,11 +26,13 @@ namespace src.Combat
         }
     }
 
-    /*
     public class DefendAction : ICombatAction {
-        public void PerformAction(Entity actor, Entity? target)
+        public IGameLog PerformAction(Entity actor, Entity? target)
         {
-            Console.WriteLine($"{actor.GetType().Name} " + "is defending");
+            DefenseBuff effect = new();
+            actor.Effects.Add(effect);
+
+            return new EffectLog(actor.Name, effect.EntityState);
         }
-    }*/
+    }
 }

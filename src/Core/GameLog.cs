@@ -42,6 +42,22 @@ namespace src.Core
         }
     }
 
+    public class  EffectLog : IGameLog
+    {
+        private readonly string _target;
+        private readonly string _state;
+        public EffectLog(string target, string state)
+        {
+            _target = target;
+            _state = state;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_target} {_state}";
+        }
+    }
+
     public class EmptyLog : IGameLog
     {
         public string GetMessage()
