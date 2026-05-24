@@ -10,7 +10,9 @@ namespace src.Combat
         public static int CalculateDamage(Entity actor, Entity target)
         {
             int defense = CalculateDefense(target);
-            int damage = actor.Stats.Attack - defense; 
+            int attack = CalculateAttack(actor);
+
+            int damage = attack - defense; 
             if (damage < 1)
             {
                 damage = 1;
@@ -30,6 +32,16 @@ namespace src.Combat
                 }
             }
             return defense;
+        }
+
+        private static int CalculateAttack(Entity entity)
+        {
+            int attack = entity.Stats.Attack;
+            if (entity is Player player && player.Equipment.EquippedWeapon != null)
+            {
+                attack += player.Equipment.EquippedWeapon.StatsBonus.Attack;
+            }
+            return attack;
         }
     }
 }

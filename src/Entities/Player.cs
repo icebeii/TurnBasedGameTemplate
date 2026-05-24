@@ -10,12 +10,15 @@ namespace src.Entities
         public int Experience { get; private set; }
 
         public Inventory Inventory { get; }
+
+        public EquipmentSlots Equipment { get; }
         public Player()
         {
             Name = "Player";
             Level = 1;
             Experience = 0;
             Inventory = new Inventory(5);
+            Equipment = new EquipmentSlots();
             Stats = new Stats
             {
                 MaxHealth = 100,

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using src.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace src.Core
@@ -55,6 +56,25 @@ namespace src.Core
         public string GetMessage()
         {
             return $"{_target} {_state}";
+        }
+    }
+
+    public class  WeaponEquippedLog : IGameLog
+    {
+        private readonly string _weapon;
+        private readonly string _name;
+        private readonly Stats _statsBonus;
+
+        public WeaponEquippedLog(string weapon, string name, Stats statsBonus)
+        {
+            _weapon = weapon;
+            _name = name;
+            _statsBonus = statsBonus;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} picks up the {_weapon}. Attack increased by {_statsBonus.Attack}";
         }
     }
 
