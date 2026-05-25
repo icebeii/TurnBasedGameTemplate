@@ -2,9 +2,6 @@
 using src.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace src.Items
 {
@@ -26,12 +23,26 @@ namespace src.Items
 
         public override IGameLog Equip(Entity entity)
         {
-            throw new NotImplementedException();
+            if (entity is Player player)
+            {
+                return new WeaponEquippedLog(Name, player.Name, StatsBonus);
+            }
+            return new EmptyLog();
         }
     }
 
     public class Sword : Weapon
     {
         public Sword() : base("sword", new Stats { Attack = 5 }) { }
+    }
+
+    public class Axe : Weapon
+    {
+        public Axe() : base("axe", new Stats { Attack = 8 }) { }
+    }
+
+    public class Knife : Weapon
+    {
+        public Knife() : base("knife", new Stats { Attack = 3 }) { }
     }
 }

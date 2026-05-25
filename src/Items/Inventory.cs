@@ -35,9 +35,9 @@ namespace src.Items
     {
         public Weapon? EquippedWeapon { get; private set; }
 
-        public Weapon? EquipWeapon(Weapon weapon)
+        public Weapon? EquipWeapon(Weapon? weapon)
         {
-            Weapon previous = null;
+            Weapon? previous = null;
             if (EquippedWeapon != null)
             {
                 previous = EquippedWeapon;

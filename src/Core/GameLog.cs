@@ -78,6 +78,23 @@ namespace src.Core
         }
     }
 
+    public class WeaponDroppedLog : IGameLog
+    {
+        private readonly string _weapon;
+        private readonly string _name;
+
+        public WeaponDroppedLog(string weapon, string name)
+        {
+            _weapon = weapon;
+            _name = name;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} drops the {_weapon}.";
+        }
+    }
+
     public class EmptyLog : IGameLog
     {
         public string GetMessage()
