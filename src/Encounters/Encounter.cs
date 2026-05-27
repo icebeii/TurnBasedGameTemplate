@@ -83,6 +83,11 @@ namespace src.Encounters
                 PrintWeaponList();
 
                 choice = GetChoice();
+                if (choice == Weapons.Count + 1)
+                {
+                    break;
+                }
+
                 PickWeapon(context, choice - 1);
                 
             }
@@ -124,7 +129,7 @@ namespace src.Encounters
                     Console.WriteLine($"{i + 1}. This stand is empty");
                 }
             }
-            Console.WriteLine($"{Weapons.Count + 1} Exit the room");
+            Console.WriteLine($"{Weapons.Count + 1}. Exit the room");
         }
 
         private int GetChoice()
@@ -134,13 +139,70 @@ namespace src.Encounters
                 string? input = Console.ReadLine();
                 if (int.TryParse(input, out int choice))
                 {
-                    if (choice >= 1 && choice <= Weapons.Count)
+                    if ((choice >= 1 && choice <= Weapons.Count) || choice == Weapons.Count + 1)
                     {
                         return choice;
                     }
                 }
                 Console.WriteLine("Invalid choice.");
             }
+        }
+    }
+
+    public class ChestEncounter : IEncounter
+    {
+        public List<Consumable> Items { get; }
+
+        public ChestEncounter(List<Consumable> items)
+        {
+            Items = items;
+        }
+
+        public void Execute(GameContext context)
+        {
+
+        }
+    }
+
+    public class TrapEncounter : IEncounter
+    {
+        public int Damage { get; }
+
+        public TrapEncounter(int damage)
+        {
+            Damage = damage;
+        }
+
+        public void Execute(GameContext context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("You fell into a trap!");
+
+            context.Player.TakeDamage(Damage);
+            context.AddLog(new TrapEscapedLog(context.Player.Name, Damage));
+
+            context.Player.PrintCurrentHP();
+        }
+    }
+
+    public class HealingFountainEncounter : IEncounter
+    {
+        public int HPRestoration;
+
+        public HealingFountainEncounter(int hpRestoration)
+        {
+            HPRestoration = hpRestoration;
+        }
+
+        public void Execute(GameContext context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("You see a fountain, the water in which magically glows.");
+
+            context.Player.RestoreHP(HPRestoration);
+            context.AddLog(new FountainWaterSipLog(context.Player.Name, HPRestoration));
+
+            context.Player.PrintCurrentHP();
         }
     }
 }

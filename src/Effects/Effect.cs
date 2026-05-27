@@ -18,14 +18,27 @@ namespace src.Effects
 
     public class DefenseBuff : Effect
     {
-        public int DefenseMultiplier { get; }
+        public int DefenseBonus { get; }
 
         public override string EntityState => "is defending";
 
-        public DefenseBuff()
+        public DefenseBuff(int duration, int defenseBonus)
         {
-            Duration = 1;
-            DefenseMultiplier = 2;
+            Duration = duration;
+            DefenseBonus = defenseBonus;
+        }
+    }
+
+    public class AttackBuff : Effect
+    {
+        public int AttackBonus { get; }
+
+        public override string EntityState => "is full of strength";
+
+        public AttackBuff(int attackBonus, int duration)
+        {
+            AttackBonus = attackBonus;
+            Duration = duration;
         }
     }
 }

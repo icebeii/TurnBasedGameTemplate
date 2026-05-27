@@ -1,5 +1,6 @@
 using src.Core;
 using src.Entities;
+using src.Items;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +12,7 @@ namespace src.Encounters
         {
             int roll = context.Random.Next(100);
 
-            return GenerateCombat();
+            return GenerateHealingFountain();
         }
 
         private CombatEncounter GenerateCombat()
@@ -21,6 +22,26 @@ namespace src.Encounters
             enemies.Add(enemy);
 
             return new CombatEncounter(enemies);
+        }
+
+        private WeaponStandEncounter GenerateWeaponStand()
+        {
+            List<Weapon> weapons = new List<Weapon>
+            {
+                new Axe(),
+                new Knife(),
+            };
+            return new WeaponStandEncounter(weapons);
+        }
+
+        private TrapEncounter GenerateTrap()
+        {
+            return new TrapEncounter(10);
+        }
+
+        private HealingFountainEncounter GenerateHealingFountain()
+        {
+            return new HealingFountainEncounter(10);
         }
     }
 }

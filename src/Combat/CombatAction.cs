@@ -20,7 +20,7 @@ namespace src.Combat
                 return new EmptyLog();
             }
             int damage = DamageCalculator.CalculateDamage(actor, target);
-            target.Stats.CurrentHealth -= damage;
+            target.TakeDamage(damage);
 
             return new DamageLog(actor.Name, target.Name, damage);
         }
@@ -29,8 +29,8 @@ namespace src.Combat
     public class DefendAction : ICombatAction {
         public IGameLog PerformAction(Entity actor, Entity? target)
         {
-            DefenseBuff effect = new();
-            actor.Effects.Add(effect);
+            DefenseBuff effect = new DefenseBuff(1, actor.Stats.Defense);
+            actor.ApplyEffect(effect);
 
             return new EffectLog(actor.Name, effect.EntityState);
         }

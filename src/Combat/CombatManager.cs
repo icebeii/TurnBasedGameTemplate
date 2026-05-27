@@ -95,11 +95,11 @@ namespace src.Combat
         private void PrintHP(Player player, List<Enemy> enemies)
         {
             Console.WriteLine();
-            Console.WriteLine("Your HP: " + $"{player.Stats.CurrentHealth}" + "/" + $"{player.Stats.MaxHealth}");
+            player.PrintCurrentHP();
 
             foreach (Enemy enemy in enemies)
             {
-                Console.WriteLine($"{enemy.Name} " + "HP: " + $"{enemy.Stats.CurrentHealth}" + "/" + $"{enemy.Stats.MaxHealth}");
+                enemy.PrintCurrentHP();
             }
         }
     }

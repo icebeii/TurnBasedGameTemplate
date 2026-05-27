@@ -33,16 +33,16 @@ namespace src.Items
 
     public class Sword : Weapon
     {
-        public Sword() : base("sword", new Stats { Attack = 5 }) { }
+        public Sword() : base("Sword", new Stats { Attack = 5 }) { }
     }
 
     public class Axe : Weapon
     {
-        public Axe() : base("axe", new Stats { Attack = 8 }) { }
+        public Axe() : base("Axe", new Stats { Attack = 8 }) { }
     }
 
     public class Knife : Weapon
     {
-        public Knife() : base("knife", new Stats { Attack = 3 }) { }
+        public Knife() : base("Knife", new Stats { Attack = 3 }) { }
     }
 }

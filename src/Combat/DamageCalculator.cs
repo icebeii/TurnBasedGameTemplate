@@ -27,7 +27,7 @@ namespace src.Combat
             {
                 if (effect is DefenseBuff defenseBuff)
                 {
-                    defense *= defenseBuff.DefenseMultiplier;
+                    defense += defenseBuff.DefenseBonus;
                     defenseBuff.DecreaseDuration();
                 }
             }

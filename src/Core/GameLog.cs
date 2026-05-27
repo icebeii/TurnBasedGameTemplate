@@ -95,6 +95,76 @@ namespace src.Core
         }
     }
 
+    public class TrapEscapedLog : IGameLog
+    {
+        private readonly string _name;
+        private int _damage;
+
+        public TrapEscapedLog(string name, int damage)
+        {
+            _name = name; 
+            _damage = damage;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} escaped from the trap and took {_damage} damage.";
+        }
+    }
+
+    public class FountainWaterSipLog : IGameLog
+    {
+        private readonly string _name;
+        private readonly int _hpRestoration;
+
+        public FountainWaterSipLog(string name, int hpRestoration)
+        {
+            _name = name;
+            _hpRestoration = hpRestoration;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} takes a sip of water from the fountain. {_hpRestoration} HP restored.";
+        }
+    }
+
+    public class StrangeFruitConsumedLog : IGameLog
+    {
+        private readonly string _name;
+        private readonly int _attackBonus;
+        private readonly int _duration;
+
+        public StrangeFruitConsumedLog(string name, int attackBonus, int duration)
+        {
+            _name = name;
+            _attackBonus = attackBonus;
+            _duration = duration;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} consumed the strange fruit. Attack increased by {_attackBonus} for {_duration} turns.";
+        }
+    }
+
+    public class HealingPotionConsumedLog : IGameLog
+    {
+        private readonly string _name;
+        private readonly int _hpRestoration;
+
+        public HealingPotionConsumedLog(string name, int hpRestoration)
+        {
+            _name = name;
+            _hpRestoration= hpRestoration;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} consumed the healing potion. {_hpRestoration} HP restored.";
+        }
+    }
+
     public class EmptyLog : IGameLog
     {
         public string GetMessage()
