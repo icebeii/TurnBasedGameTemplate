@@ -28,6 +28,33 @@ namespace src.Entities
             };
         }
 
+        public bool TakeItem(Consumable item)
+        {
+            if (item != null)
+            {
+                return Inventory.AddItem(item);
+            }
+            return false;
+        }
+
+        public void GainXP(int amount)
+        {
+            int required = CalculateRequiredXP();
+            int total = Experience + amount;
+
+            if (total >= required)
+            {
+                int rest = total - required;
+                Level++;
+                Experience = rest;
+                UpgradeStatsPerLevel();
+            }
+            else
+            {
+                Experience = total;
+            }
+        }
+
         public void PrintPlayerStats()
         {
             Console.WriteLine();
@@ -37,6 +64,18 @@ namespace src.Entities
             Console.WriteLine("Defense: " + $"{Stats.Defense}");
             Console.WriteLine("Level: " + $"{Level}");
             Console.WriteLine("XP: " + $"{Experience}");
+        }
+
+        private int CalculateRequiredXP()
+        {
+            return (int) (100 * Math.Pow(1.5, Level - 1));
+        }
+
+        private void UpgradeStatsPerLevel()
+        {
+            Stats.MaxHealth += 10;
+            Stats.Attack += 2;
+            Stats.Defense += 1;
         }
     }
 }

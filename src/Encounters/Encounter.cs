@@ -149,18 +149,47 @@ namespace src.Encounters
         }
     }
 
-    public class ChestEncounter : IEncounter
+    public class ItemEncounter : IEncounter
     {
-        public List<Consumable> Items { get; }
+        Consumable Item;
 
-        public ChestEncounter(List<Consumable> items)
+        public ItemEncounter(Consumable item)
         {
-            Items = items;
+            Item = item;
         }
 
         public void Execute(GameContext context)
         {
+            Console.WriteLine();
+            Console.WriteLine($"You enter a quiet room. A {Item.Name} lies on the ground.");
 
+            Console.WriteLine();
+            Console.WriteLine("1. Take it");
+            Console.WriteLine("2. Exit the room");
+
+            string? input = Console.ReadLine();
+            switch (input)
+            {
+                case "1":
+                    IGameLog log = TakeItem(context.Player);
+                    context.AddLog(log);
+                    break;
+                case "2":
+                    return;
+            }
+        }
+
+        private IGameLog TakeItem(Player player)
+        {
+            bool success = player.TakeItem(Item);
+            if (success)
+            {
+                return new ItemWasTakenLog(player.Name, Item.Name);
+            }
+            else
+            {
+                return new FailedTakeItemLog(player.Name, Item.Name);
+            }
         }
     }
 

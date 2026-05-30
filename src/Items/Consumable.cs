@@ -17,7 +17,7 @@ namespace src.Items
     {
         public int AttackBonus = 5;
         public int EffectDuration = 3;
-        public StrangeFruit(string name) : base(name) { }
+        public StrangeFruit() : base("strange fruit") { }
 
         public override IGameLog Use(Entity target)
         {
@@ -30,7 +30,7 @@ namespace src.Items
     {
         public int HPRestoration = 5;
 
-        public HealingPotion(string name) : base(name) { }
+        public HealingPotion() : base("healing potion") { }
 
         public override IGameLog Use(Entity target)
         {

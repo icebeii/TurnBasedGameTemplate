@@ -165,6 +165,40 @@ namespace src.Core
         }
     }
 
+    public class ItemWasTakenLog : IGameLog
+    {
+        private readonly string _name;
+        private readonly string _item;
+
+        public ItemWasTakenLog(string name, string item)
+        {
+            _name = name;
+            _item = item;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} took {_item}.";
+        }
+    }
+
+    public class FailedTakeItemLog : IGameLog
+    {
+        private readonly string _name;
+        private readonly string _item;
+
+        public FailedTakeItemLog(string name, string item)
+        {
+            _name = name;
+            _item = item;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} failed to take {_item}.";
+        }
+    }
+
     public class EmptyLog : IGameLog
     {
         public string GetMessage()

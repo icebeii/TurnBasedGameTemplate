@@ -13,7 +13,7 @@ namespace src.Combat
             {
                 PlayerTurn(context, enemies);
                 
-                RemoveDeadEnemies(enemies);
+                RemoveDeadEnemies(context.Player, enemies);
                 if (enemies.Count == 0)
                 {
                     Console.WriteLine("All enemies defeated!");
@@ -81,12 +81,13 @@ namespace src.Combat
             }
         }
 
-        private void RemoveDeadEnemies(List<Enemy> enemies)
+        private void RemoveDeadEnemies(Player player, List<Enemy> enemies)
         {
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (!enemies[i].IsAlive)
                 {
+                    player.GainXP(enemies[i].XPReward);
                     enemies.RemoveAt(i);
                 }
             }
