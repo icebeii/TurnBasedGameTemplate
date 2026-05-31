@@ -20,8 +20,9 @@ namespace src.Encounters
             int item = 20;
             int trap = 15 + difficulty * trap_scale;
             int heal = 10;
+            int shrine = 5;
 
-            int sum = combat + weapon + item + trap + heal;
+            int sum = combat + weapon + item + trap + heal + shrine;
             int roll = context.Random.Next(sum + 1);
 
             if ((roll -= combat) < 0)
@@ -40,7 +41,11 @@ namespace src.Encounters
             {
                 return GenerateTrap();
             }
-            return GenerateHealingFountain();
+            if ((roll -= heal) < 0)
+            {
+                return GenerateHealingFountain();
+            }
+            return GenerateShrine();
         }
 
         private CombatEncounter GenerateCombat(Random random, int playerLevel)
@@ -54,25 +59,25 @@ namespace src.Encounters
             
             for (int i = 0; i < count; i++)
             {
-                enemies.Add(GenerateEnemy(random));
+                enemies.Add(GenerateEnemy(random, playerLevel));
             }
 
             return new CombatEncounter(enemies);
         }
 
-        private Enemy GenerateEnemy(Random random)
+        private Enemy GenerateEnemy(Random random, int playerLevel)
         {
             int roll = random.Next(3);
             switch (roll)
             {
                 case 0:
-                    return new Goblin();
+                    return new Goblin(playerLevel - 1);
                 case 1:
-                    return new Spider();
+                    return new Spider(playerLevel - 1);
                 case 2:
-                    return new Skeleton();
+                    return new Skeleton(playerLevel - 1);
                 default:
-                    return new Goblin();
+                    return new Goblin(playerLevel - 1);
             }
         }
 
@@ -141,6 +146,11 @@ namespace src.Encounters
             }
 
             return new ItemEncounter(item);
+        }
+
+        private ShrineEncounter GenerateShrine()
+        {
+            return new ShrineEncounter();
         }
     }
 }

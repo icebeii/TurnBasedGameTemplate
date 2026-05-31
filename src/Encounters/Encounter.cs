@@ -22,10 +22,10 @@ namespace src.Encounters
 
         public void Execute(GameContext context)
         {
-            Console.WriteLine();
+            Output.Handler.WriteLine("");
 
-            Console.WriteLine(EnemiesEncountered());
-            Console.WriteLine();
+            Output.Handler.WriteLine(EnemiesEncountered());
+            Output.Handler.WriteLine("");
             PrintEnemiesHP();
 
             CombatManager combat = new();
@@ -36,7 +36,7 @@ namespace src.Encounters
         {
             for (int i = 0; i < Enemies.Count; i++)
             {
-                Console.WriteLine(Enemies[i].Name + " HP: " + $"{Enemies[i].Stats.CurrentHealth}");
+                Output.Handler.WriteLine(Enemies[i].Name + " HP: " + $"{Enemies[i].Stats.CurrentHealth}");
             }
         }
 
@@ -74,15 +74,15 @@ namespace src.Encounters
 
         public void Execute(GameContext context)
         {
-            Console.WriteLine();
-            Console.WriteLine($"You found a room with {Weapons.Count} weapon stands.");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine($"You found a room with {Weapons.Count} weapon stands.");
 
             int choice = 0;
             while (choice != Weapons.Count + 1)
             {
                 PrintWeaponList();
 
-                choice = GetChoice();
+                choice = InputHandler.GetChoiceFromTheList(1, Weapons.Count + 1);
                 if (choice == Weapons.Count + 1)
                 {
                     break;
@@ -116,36 +116,20 @@ namespace src.Encounters
 
         private void PrintWeaponList()
         {
-            Console.WriteLine();
-            Console.WriteLine("Choose a weapon:");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine("Choose a weapon:");
             for (int i = 0; i < Weapons.Count;i++)
             {
                 if ( Weapons[i] != null)
                 {
-                    Console.WriteLine($"{i + 1}. {Weapons[i].Name}: {Weapons[i].StatsBonus.Attack} attack bonus");
+                    Output.Handler.WriteLine($"{i + 1}. {Weapons[i].Name}: {Weapons[i].StatsBonus.Attack} attack bonus");
                 }
                 else
                 {
-                    Console.WriteLine($"{i + 1}. This stand is empty");
+                    Output.Handler.WriteLine($"{i + 1}. This stand is empty");
                 }
             }
-            Console.WriteLine($"{Weapons.Count + 1}. Exit the room");
-        }
-
-        private int GetChoice()
-        {
-            while (true)
-            {
-                string? input = Console.ReadLine();
-                if (int.TryParse(input, out int choice))
-                {
-                    if ((choice >= 1 && choice <= Weapons.Count) || choice == Weapons.Count + 1)
-                    {
-                        return choice;
-                    }
-                }
-                Console.WriteLine("Invalid choice.");
-            }
+            Output.Handler.WriteLine($"{Weapons.Count + 1}. Exit the room");
         }
     }
 
@@ -160,21 +144,21 @@ namespace src.Encounters
 
         public void Execute(GameContext context)
         {
-            Console.WriteLine();
-            Console.WriteLine($"You enter a quiet room. A {Item.Name} lies on the ground.");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine($"You enter a quiet room. A {Item.Name} lies on the ground.");
 
-            Console.WriteLine();
-            Console.WriteLine("1. Take it");
-            Console.WriteLine("2. Exit the room");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine("1. Take it");
+            Output.Handler.WriteLine("2. Exit the room");
 
-            string? input = Console.ReadLine();
-            switch (input)
+            int choice = InputHandler.GetChoiceFromTheList(1, 2);
+            switch (choice)
             {
-                case "1":
+                case 1:
                     IGameLog log = TakeItem(context.Player);
                     context.AddLog(log);
                     break;
-                case "2":
+                case 2:
                     return;
             }
         }
@@ -204,8 +188,8 @@ namespace src.Encounters
 
         public void Execute(GameContext context)
         {
-            Console.WriteLine();
-            Console.WriteLine("You fell into a trap!");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine("You fell into a trap!");
 
             context.Player.TakeDamage(Damage);
             context.AddLog(new TrapEscapedLog(context.Player.Name, Damage));
@@ -225,12 +209,39 @@ namespace src.Encounters
 
         public void Execute(GameContext context)
         {
-            Console.WriteLine();
-            Console.WriteLine("You see a fountain, the water in which magically glows.");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine("You see a fountain, the water in which magically glows.");
 
             context.Player.RestoreHP(HPRestoration);
             context.AddLog(new FountainWaterSipLog(context.Player.Name, HPRestoration));
 
+            context.Player.PrintCurrentHP();
+        }
+    }
+
+    public class ShrineEncounter : IEncounter
+    {
+        private const int Damage = 30;
+        private const int Restoration = 30;
+        public void Execute(GameContext context)
+        {
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine("A strange shrine stands before you.");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine("1. Pray");
+            Output.Handler.WriteLine("2. Ignore");
+
+            int choice = InputHandler.GetChoiceFromTheList(1, 2);
+            if (choice == 1)
+            {
+                context.Player.RestoreHP(Restoration);
+                context.AddLog(new BlessedByShrineLog(context.Player.Name, Restoration));
+            }
+            else if (choice == 2)
+            {
+                context.Player.TakeDamage(Damage);
+                context.AddLog(new CursedByShrineLog(context.Player.Name, Damage));
+            }
             context.Player.PrintCurrentHP();
         }
     }

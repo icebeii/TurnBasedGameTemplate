@@ -29,6 +29,11 @@ namespace src.Items
             }
             return new EmptyLog();
         }
+
+        public virtual int ModifyDamage(int damage)
+        {
+            return damage;
+        }
     }
 
     public class Sword : Weapon
@@ -39,10 +44,29 @@ namespace src.Items
     public class Axe : Weapon
     {
         public Axe() : base("Axe", new Stats { Attack = 8 }) { }
+        public override int ModifyDamage(int damage)
+        {
+            Random random = new Random();
+            int bonus = random.Next(3, 8);
+            return bonus + damage;
+        }
     }
 
     public class Knife : Weapon
     {
+        private const int CritChance = 30;
+        private const double CritMultiplier = 2;
+
         public Knife() : base("Knife", new Stats { Attack = 3 }) { }
+        public override int ModifyDamage(int damage)
+        {
+            Random random = new Random();
+            int roll = random.Next(100);
+            if (roll < CritChance)
+            {
+                return (int)(damage * CritMultiplier);
+            }
+            return damage;
+        }
     }
 }

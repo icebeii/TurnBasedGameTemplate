@@ -12,17 +12,20 @@ namespace src.Core
 
         public List<IGameLog> Logs { get; } = new();
 
+        public IOutputHandler OutputHandler { get; }
+
         public GameContext(Player player)
         {
             Player = player;
             Random = new Random();
+            OutputHandler = new ConsoleOutputHandler();
         }
 
         public void AddLog(IGameLog log)
         {
             Logs.Add(log);
-            Console.WriteLine();
-            Console.WriteLine(log.GetMessage());
+            Output.Handler.WriteLine("");
+            Output.Handler.ShowLog(log);
         }
     }
 }

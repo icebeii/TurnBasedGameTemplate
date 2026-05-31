@@ -22,25 +22,25 @@ From a player’s perspective, the application provides an interactive experienc
 From a developer’s perspective, the application acts as a structured foundation for building similar games. A developer can extend the system by introducing new types of enemies, items, or events without modifying the core game engine. For example, a new enemy type can be implemented by inheriting from a base enemy class, while new item types can be introduced through a shared item abstraction.
 
 #### Main features
-The application is structured around a continuous sequence of encounters. Each encounter represents a discrete situation that the player must resolve before progressing further. Encounters are dynamically generated and can be either combat or non-combat events.
++ The application is structured around a continuous sequence of encounters. Each encounter represents a discrete situation that the player must resolve before progressing further. Encounters are dynamically generated and can be either combat or non-combat events.
 
-Combat encounters represent the core gameplay mechanic. When a combat encounter begins, the player faces an enemy with its own set of attributes. The combat system is turn-based, meaning that the player and the enemy act in alternating turns until one of them is defeated.
++ Combat encounters represent the core gameplay mechanic. When a combat encounter begins, the player faces an enemy with its own set of attributes. The combat system is turn-based, meaning that the player and the enemy act in alternating turns until one of them is defeated.
 
-During the player’s turn, the user can choose from several actions: attacking the enemy, defending to reduce incoming damage, or using an item from the inventory. After that the enemy performs its action based on a predefined simple decision logic. This may include attacking or defending.
++ During the player’s turn, the user can choose from several actions: attacking the enemy, defending to reduce incoming damage, or using an item from the inventory. After that the enemy performs its action based on a predefined simple decision logic. This may include attacking or defending.
 
-Damage calculation is based on the relationship between attack and defense attributes. Defensive actions temporarily reduce incoming damage.
++ Damage calculation is based on the relationship between attack and defense attributes. Defensive actions temporarily reduce incoming damage.
 
-The player is defined by a set of attributes such as health, attack, and defense. The player can equip a single weapon at a time, which modifies combat behavior. Different weapon types provide distinct playstyles, such as balanced performance, increased damage, or special effects like critical hits.
++ The player is defined by a set of attributes such as health, attack, and defense. The player can equip a single weapon at a time, which modifies combat behavior. Different weapon types provide distinct playstyles, such as balanced performance, increased damage, or special effects like critical hits.
 
-The game includes an inventory system that allows the player to collect and use items. Items provide various effects, such as restoring health, reducing incoming damage for a limited time, etc. Items are consumed upon use, and the inventory size is limited.
++ The game includes an inventory system that allows the player to collect and use items. Items provide various effects, such as restoring health, reducing incoming damage for a limited time, etc. Items are consumed upon use, and the inventory size is limited.
 
-Enemies are generated with varying difficulty levels and attributes.
++ Enemies are generated with varying difficulty levels and attributes.
 
-Between combat encounters, the player may encounter random events. These events represent non-combat situations such as finding items, receiving healing, taking damage, or being presented with a choice that involves risk and reward. Event outcomes may be deterministic or based on probability, increasing replayability.
++ Between combat encounters, the player may encounter random events. These events represent non-combat situations such as finding items, receiving healing, taking damage, or being presented with a choice that involves risk and reward. Event outcomes may be deterministic or based on probability, increasing replayability.
 
-The difficulty of the game gradually increases as the player progresses through encounters. This is achieved by adjusting enemy strength and the likelihood of more challenging encounters.
++ The difficulty of the game gradually increases as the player progresses through encounters. This is achieved by adjusting enemy strength and the likelihood of more challenging encounters.
 
-The game continues until the player’s health reaches zero. The player’s performance is evaluated based on the number of encounters successfully completed, which serves as the final score.
++ The game continues until the player’s health reaches zero. The player’s performance is evaluated based on the number of encounters successfully completed, which serves as the final score.
 
 #### Example program
 After starting the program, a welcome message and an action menu is displayed:

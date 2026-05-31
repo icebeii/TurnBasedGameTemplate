@@ -1,6 +1,7 @@
 ﻿using src.Core;
 using src.Effects;
 using src.Entities;
+using src.Items;
 using System;
 using System.Collections.Generic;
 
@@ -33,6 +34,34 @@ namespace src.Combat
             actor.ApplyEffect(effect);
 
             return new EffectLog(actor.Name, effect.EntityState);
+        }
+    }
+
+    public class UseItemAction : ICombatAction
+    {
+        public IGameLog PerformAction(Entity actor, Entity? target)
+        {
+            if (actor is Player player)
+            {
+                int count = player.Inventory.Items.Count;
+                if (count != 0)
+                {
+                    Output.Handler.WriteLine("Choose an item:");
+                    player.PrintInventory();
+
+                    int choice = InputHandler.GetChoiceFromTheList(1, count);
+                    Consumable item = player.Inventory.Items[choice - 1];
+                    
+                    IGameLog log = item.Use(actor);
+                    player.Inventory.RemoveItem(choice - 1);    
+                    return log;
+                }
+                else
+                {
+                    return new EmptyInventoryLog(player.Name);
+                }
+            }
+            return new EmptyLog();
         }
     }
 }

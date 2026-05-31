@@ -24,6 +24,44 @@ namespace src.Core
         }
     }
 
+    public class AllEnemiesDefeatedLog : IGameLog
+    {
+        public string GetMessage()
+        {
+            return "All enemies defeated!";
+        }
+    }
+
+    public class CursedByShrineLog : IGameLog
+    {
+        private readonly string _name;
+        private readonly int _damage;
+        public CursedByShrineLog(string name, int damage)
+        {
+            _name = name;
+            _damage = damage;
+        }
+        public string GetMessage()
+        {
+            return $"{_name} was cursed by shrine and took {_damage} damage.";
+        }
+    }
+
+    public class BlessedByShrineLog : IGameLog
+    {
+        private readonly string _name;
+        private readonly int _restoration;
+        public BlessedByShrineLog(string name, int restoration)
+        {
+            _name = name;
+            _restoration = restoration;
+        }
+        public string GetMessage()
+        {
+            return $"{_name} was blessed by shrine and restored {_restoration} HP.";
+        }
+    }
+
     public class DamageLog : IGameLog
     {
         private readonly string _source;
@@ -196,6 +234,21 @@ namespace src.Core
         public string GetMessage()
         {
             return $"{_name} failed to take {_item}.";
+        }
+    }
+
+    public class EmptyInventoryLog : IGameLog
+    {
+        private readonly string _name;
+
+        public EmptyInventoryLog(string name)
+        {
+            _name = name;
+        }
+
+        public string GetMessage()
+        {
+            return $"{_name} inventory is empty.";
         }
     }
 

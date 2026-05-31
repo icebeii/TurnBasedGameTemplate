@@ -18,26 +18,37 @@ namespace src.Core
 
         public void Run()
         {
-            Console.Clear();
-            Console.WriteLine("Game started!");
+            Output.Handler.Clear();
+            Output.Handler.WriteLine("Game started!");
             _context.Player.PrintPlayerStats();
+            bool first = true;
 
             while (_context.Player.IsAlive)
             {
-                Console.WriteLine();
-                Console.WriteLine("Encounter #" + $"{_context.EncounterCount + 1}");
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    Output.Handler.Clear();
+                }
+
+                Output.Handler.WriteLine("Encounter #" + $"{_context.EncounterCount + 1}");
 
                 IEncounter encounter = _encounterGenerator.Generate(_context);
                 encounter.Execute(_context);
                 _context.EncounterCount++;
 
-                break; // temporary
+                Output.Handler.WriteLine("");
+                Output.Handler.WriteLine("Press any key to continue.");
+                Output.Handler.WaitForKey();
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Game over!");
-            Console.WriteLine("Encounters completed: " + $"{_context.EncounterCount}");
-            Console.WriteLine("Final level: " + $"{_context.Player.Level}");
+            Output.Handler.WriteLine("");
+            Output.Handler.WriteLine("Game over!");
+            Output.Handler.WriteLine("Encounters completed: " + $"{_context.EncounterCount}");
+            Output.Handler.WriteLine("Final level: " + $"{_context.Player.Level}");
         }      
     }
 }

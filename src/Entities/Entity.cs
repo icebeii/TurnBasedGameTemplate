@@ -1,4 +1,5 @@
-﻿using src.Effects;
+﻿using src.Core;
+using src.Effects;
 using System;
 using System.Collections.Generic;
 
@@ -43,7 +44,7 @@ namespace src.Entities
 
         public virtual void PrintCurrentHP()
         {
-            Console.WriteLine($"{Name} " + "HP: " + $"{Stats.CurrentHealth}" + "/" + $"{Stats.MaxHealth}");
+            Output.Handler.WriteLine($"{Name} " + "HP: " + $"{Stats.CurrentHealth}" + "/" + $"{Stats.MaxHealth}");
         }
     }
 }

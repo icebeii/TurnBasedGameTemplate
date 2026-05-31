@@ -6,7 +6,7 @@ namespace src.Items
     public class Inventory
     {
         public int Capacity {  get; }
-        public List<Item> Items { get; }
+        public List<Consumable> Items { get; }
 
         public Inventory(int capacity)
         {
@@ -14,7 +14,7 @@ namespace src.Items
             Items = new();
         }
 
-        public bool AddItem(Item item)
+        public bool AddItem(Consumable item)
         {
             if (Items.Count >= Capacity)
             {
@@ -25,9 +25,19 @@ namespace src.Items
             return true;
         }
 
-        public void RemoveItem(Item item)
+        public void RemoveItem(int idx)
         {
-            Items.Remove(item);
+            Items.RemoveAt(idx);
+        }
+
+        public string GetItemList()
+        {
+            string output = "";
+            for (int i = 0; i < Items.Count; i++)
+            {
+                output += $"{i + 1}. {Items[i].Name}\n";
+            }
+            return output;
         }
     }
 

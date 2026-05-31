@@ -40,6 +40,7 @@ namespace src.Combat
             if (entity is Player player && player.Equipment.EquippedWeapon != null)
             {
                 attack += player.Equipment.EquippedWeapon.StatsBonus.Attack;
+                attack = player.Equipment.EquippedWeapon.ModifyDamage(attack);
             }
             return attack;
         }

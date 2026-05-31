@@ -6,25 +6,23 @@ namespace src
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the game!");
-            Console.WriteLine("1. Start new game");
-            Console.WriteLine("2. Exit");
+            Output.Handler = new ConsoleOutputHandler();
 
-            string? input = Console.ReadLine();
+            Output.Handler.WriteLine("Welcome to the game!");
+            Output.Handler.WriteLine("1. Start new game");
+            Output.Handler.WriteLine("2. Exit");
 
-            switch(input)
+            int choice = InputHandler.GetChoiceFromTheList(1, 2);
+
+            switch(choice)
             {
-                case "1":
+                case 1:
                     Engine game = new();
                     game.Run();
                     break;
 
-                case "2":
+                case 2:
                     return;
-
-                default:
-                    Console.WriteLine("Invalid choice.");
-                    break;
             }
         }
     }

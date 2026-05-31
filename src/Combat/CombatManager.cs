@@ -13,10 +13,10 @@ namespace src.Combat
             {
                 PlayerTurn(context, enemies);
                 
-                RemoveDeadEnemies(context.Player, enemies);
+                RemoveDeadEnemies(context, enemies);
                 if (enemies.Count == 0)
                 {
-                    Console.WriteLine("All enemies defeated!");
+                    context.AddLog(new AllEnemiesDefeatedLog());
                     break;
                 }
                 foreach (Enemy enemy in enemies)
@@ -33,27 +33,41 @@ namespace src.Combat
 
         private void PlayerTurn(GameContext context, List<Enemy> enemies)
         {
-            Console.WriteLine();
-            Console.WriteLine("Choose action:");
-            Console.WriteLine("1. Attack");
-            Console.WriteLine("2. Defend");
-            string? input = Console.ReadLine();
-            switch (input)
+            while (true)
             {
-                case "1":
-                    AttackAction attack = new AttackAction();
-                    IGameLog attackLog = attack.PerformAction(context.Player, enemies[0]);
-                    context.AddLog(attackLog);
-                    break;
-                    
-                case "2": 
-                    DefendAction defend = new DefendAction();
-                    IGameLog defendLog = defend.PerformAction(context.Player, null);
-                    context.AddLog(defendLog);
-                    break;
+                Output.Handler.WriteLine("");
+                Output.Handler.WriteLine("Choose action:");
+                Output.Handler.WriteLine("1. Attack");
+                Output.Handler.WriteLine("2. Defend");
+                Output.Handler.WriteLine("3. Use item");
 
-                default:
-                    return;
+                int choice = InputHandler.GetChoiceFromTheList(1, 3);
+                IGameLog log;
+
+                switch (choice)
+                {
+                    case 1:
+                        AttackAction attack = new();
+                        log = attack.PerformAction(context.Player, enemies[0]);
+                        context.AddLog(log);
+                        return;
+
+                    case 2:
+                        DefendAction defend = new();
+                        log = defend.PerformAction(context.Player, null);
+                        context.AddLog(log);
+                        return;
+
+                    case 3:
+                        UseItemAction useItem = new();
+                        log = useItem.PerformAction(context.Player, null);
+                        context.AddLog(log);
+                        if (log is EmptyInventoryLog)
+                        {
+                            continue;
+                        }
+                        return;
+                }
             }
         }
 
@@ -63,11 +77,28 @@ namespace src.Combat
             {
                 if (enemy.IsAlive)
                 {
-                    AttackAction attack = new AttackAction();
-                    IGameLog log = attack.PerformAction(enemy, context.Player);
+                    ICombatAction action = GetEnemyAction(enemy, context.Random);
+                    IGameLog log = action.PerformAction(enemy, context.Player);
                     context.AddLog(log); 
                 }
             }
+        }
+
+        private ICombatAction GetEnemyAction(Enemy enemy, Random random)
+        {
+            double lowHPThreshold = 0.4;
+            int defenseChance = 40;
+
+            double hpPercent = (double) enemy.Stats.CurrentHealth / enemy.Stats.MaxHealth;
+            if (hpPercent < lowHPThreshold)
+            {
+                int roll = random.Next(100);
+                if (roll < defenseChance)
+                {
+                    return new DefendAction();
+                }
+            }
+            return new AttackAction();
         }
 
         private void RemoveExpiredEffects(Entity entity)
@@ -81,13 +112,14 @@ namespace src.Combat
             }
         }
 
-        private void RemoveDeadEnemies(Player player, List<Enemy> enemies)
+        private void RemoveDeadEnemies(GameContext context, List<Enemy> enemies)
         {
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (!enemies[i].IsAlive)
                 {
-                    player.GainXP(enemies[i].XPReward);
+                    context.AddLog(new EnemyDefeatedLog(enemies[i].Name));
+                    context.Player.GainXP(enemies[i].XPReward);
                     enemies.RemoveAt(i);
                 }
             }
