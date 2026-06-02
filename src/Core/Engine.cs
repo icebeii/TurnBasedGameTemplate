@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace src.Core
 {
+    /// <summary>
+    /// Represents the main game engine responsible for running the game loop
+    /// </summary>
     public class Engine
     {
         private readonly GameContext _context;
@@ -16,6 +19,11 @@ namespace src.Core
             _encounterGenerator = new EncounterGenerator();
         }
 
+        /// <summary>
+        /// Starts and runs the main game loop
+        /// The loop generates encounters and executes them until the player dies
+        /// After the game ends, the final score and high score status are displayed
+        /// </summary>
         public void Run()
         {
             Output.Handler.Clear();
@@ -45,9 +53,18 @@ namespace src.Core
                 Output.Handler.WaitForKey();
             }
 
+            int score = _context.EncounterCount;
+            HighScoreManager highScoreManager = new HighScoreManager();
+            bool newHighScore = highScoreManager.SetNewScore(score);
+
             Output.Handler.WriteLine("");
             Output.Handler.WriteLine("Game over!");
-            Output.Handler.WriteLine("Encounters completed: " + $"{_context.EncounterCount}");
+            if (newHighScore)
+            {
+                Output.Handler.WriteLine("");
+                Output.Handler.WriteLine("New high score!");
+            }
+            Output.Handler.WriteLine("Encounters completed: " + $"{score}");
             Output.Handler.WriteLine("Final level: " + $"{_context.Player.Level}");
         }      
     }

@@ -5,8 +5,18 @@ using System.Collections.Generic;
 
 namespace src.Combat
 {
+    /// <summary>
+    /// Manages the combat loop between the player and a group of enemies
+    /// Handles turn order, action execution, effect processing, etc
+    /// </summary>
     public class CombatManager
     {
+        /// <summary>
+        /// Runs a full combat encounter until either the player dies or all enemies are defeated
+        /// Each loop iteration consists of a player turn, enemy cleanup and enemy turn
+        /// </summary>
+        /// <param name="context">The current game context</param>
+        /// <param name="enemies">The list of enemies participating in the combat</param>
         public void HandleCombat(GameContext context, List<Enemy> enemies)
         {
             while (context.Player.IsAlive && enemies.Count > 0)
@@ -31,6 +41,12 @@ namespace src.Combat
             }
         }
 
+        /// <summary>
+        /// Processes the player's turn by prompting them to choose an action
+        /// The selected action is executed immediately and logged in the game context
+        /// </summary>
+        /// <param name="context">The current game context</param>
+        /// <param name="enemies">The list of current enemies. The first enemy is used as the default attack target</param>
         private void PlayerTurn(GameContext context, List<Enemy> enemies)
         {
             while (true)
@@ -71,6 +87,12 @@ namespace src.Combat
             }
         }
 
+        /// <summary>
+        /// Processes all alive enemies' turns by selecting and executing an action for each enemy
+        /// Enemy behavior is determined by simple AI logic based on HP and randomness
+        /// </summary>
+        /// <param name="context">The current game context</param>
+        /// <param name="enemies">The list of current enemies</param>
         private void EnemyTurn(GameContext context, List<Enemy> enemies)
         {
             foreach (Enemy enemy in enemies)
@@ -84,6 +106,13 @@ namespace src.Combat
             }
         }
 
+        /// <summary>
+        /// Selects an action for an enemy based on its current health and a random roll
+        /// Enemies below a certain HP threshold may choose to defend instead of attacking
+        /// </summary>
+        /// <param name="enemy">The enemy selecting an action</param>
+        /// <param name="random">Random generator used to decide behavior</param>
+        /// <returns>An <see cref="ICombatAction"/> representing the enemy's chosen action.</returns>
         private ICombatAction GetEnemyAction(Enemy enemy, Random random)
         {
             double lowHPThreshold = 0.4;
@@ -101,6 +130,10 @@ namespace src.Combat
             return new AttackAction();
         }
 
+        /// <summary>
+        /// Removes all expired status effects from the given entity
+        /// </summary>
+        /// <param name="entity">The entity whose effects should be cleaned up</param>
         private void RemoveExpiredEffects(Entity entity)
         {
             for (int i = 0; i < entity.Effects.Count; i++)
@@ -112,6 +145,11 @@ namespace src.Combat
             }
         }
 
+        /// <summary>
+        /// Removes defeated enemies from the encounter, awards XP to the player and logs their defeat
+        /// </summary>
+        /// <param name="context">The current game context</param>
+        /// <param name="enemies">The list of enemies to check for death and removal</param>
         private void RemoveDeadEnemies(GameContext context, List<Enemy> enemies)
         {
             for (int i = 0; i < enemies.Count; i++)
@@ -125,6 +163,11 @@ namespace src.Combat
             }
         }
 
+        /// <summary>
+        /// Prints the current HP of the player and all remaining enemies to the console
+        /// </summary>
+        /// <param name="player">The player whose HP should be displayed</param>
+        /// <param name="enemies">The list of enemies whose HP should be displayed</param>
         private void PrintHP(Player player, List<Enemy> enemies)
         {
             Console.WriteLine();

@@ -5,14 +5,32 @@ using System.Collections.Generic;
 
 namespace src.Entities
 {
+    /// <summary>
+    /// Represents the player-controlled character in the game
+    /// Manages level progression, experience, inventory, equipment, and base stats
+    /// </summary>
     public class Player : Entity
     {
+        /// <summary>
+        /// Gets the current player level
+        /// </summary>
         public int Level { get; private set; }
+
+        /// <summary>
+        /// Gets the current experience points accumulated toward the next level
+        /// </summary>
         public int Experience { get; private set; }
 
+        /// <summary>
+        /// Gets the player's inventory for storing consumable items
+        /// </summary>
         public Inventory Inventory { get; }
 
+        /// <summary>
+        /// Gets the player's equipment slots 
+        /// </summary>
         public EquipmentSlots Equipment { get; }
+
         public Player()
         {
             Name = "Player";
@@ -29,6 +47,13 @@ namespace src.Entities
             };
         }
 
+        /// <summary>
+        /// Attempts to add a consumable item to the player's inventory
+        /// </summary>
+        /// <param name="item">The item to add</param>
+        /// <returns>
+        /// <c>true</c> if the item was successfully added; otherwise, <c>false</c>
+        /// </returns>
         public bool TakeItem(Consumable item)
         {
             if (item != null)
@@ -38,25 +63,29 @@ namespace src.Entities
             return false;
         }
 
+        /// <summary>
+        /// Adds experience points to the player and handles level-ups if thresholds are reached
+        /// When leveling up, player stats are automatically increased
+        /// </summary>
+        /// <param name="amount">The amount of experience to add</param>
         public void GainXP(int amount)
         {
             int required = CalculateRequiredXP();
             int total = Experience + amount;
-
-            if (total >= required)
+            while (total >= required)
             {
-                int rest = total - required;
+                total -= required;
                 Level++;
-                Experience = rest;
                 UpgradeStatsPerLevel();
                 Output.Handler.WriteLine($"Level up! Current level: {Level}");
+                required = CalculateRequiredXP();
             }
-            else
-            {
-                Experience = total;
-            }
+            Experience = total;
         }
 
+        /// <summary>
+        /// Displays the current player statistics
+        /// </summary>
         public void PrintPlayerStats()
         {
             Output.Handler.WriteLine("");
@@ -68,6 +97,10 @@ namespace src.Entities
             Output.Handler.WriteLine("XP: " + $"{Experience}");
         }
 
+        /// <summary>
+        /// Displays the current contents of the player's inventory
+        /// If the inventory is empty, a message is shown instead
+        /// </summary>
         public void PrintInventory()
         {
             string list = Inventory.GetItemList();
@@ -81,11 +114,17 @@ namespace src.Entities
             }
         }
 
+        /// <summary>
+        /// Calculates the required experience points for the next level
+        /// </summary>
         private int CalculateRequiredXP()
         {
             return (int) (100 * Math.Pow(1.5, Level - 1));
         }
 
+        /// <summary>
+        /// Increases player stats after leveling up
+        /// </summary>
         private void UpgradeStatsPerLevel()
         {
             Stats.MaxHealth += 10;

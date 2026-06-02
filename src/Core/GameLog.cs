@@ -4,8 +4,15 @@ using System.Collections.Generic;
 
 namespace src.Core
 {
+    /// <summary>
+    /// Represents a game event log entry that can be converted into a readable message.
+    /// </summary>
     public interface IGameLog
     {
+        /// <summary>
+        /// Gets a human-readable message describing the event.
+        /// </summary>
+        /// <returns>A formatted string describing the log event.</returns>
         string GetMessage();
     }
 
@@ -249,14 +256,6 @@ namespace src.Core
         public string GetMessage()
         {
             return $"{_name} inventory is empty.";
-        }
-    }
-
-    public class EmptyLog : IGameLog
-    {
-        public string GetMessage()
-        {
-            return "";
         }
     }
 }

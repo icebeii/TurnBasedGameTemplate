@@ -6,8 +6,17 @@ using System.Collections.Generic;
 
 namespace src.Encounters
 {
+    /// <summary>
+    /// Generates random encounters based on weighted probabilities and player level
+    /// </summary>
     public class EncounterGenerator
     {
+        /// <summary>
+        /// Generates a random encounter using weighted probabilities that scale with player level
+        /// Higher player levels increase the chance of more difficult encounters
+        /// </summary>
+        /// <param name="context">The current game</param>
+        /// <returns>A randomly selected encounter instance</returns>
         public IEncounter Generate(GameContext context)
         {
             int difficulty = context.Player.Level;
@@ -48,6 +57,12 @@ namespace src.Encounters
             return GenerateShrine();
         }
 
+        /// <summary>
+        /// Creates a combat encounter with a number of enemies scaled by player level
+        /// </summary>
+        /// <param name="random">Random number generator used for enemy count and selection</param>
+        /// <param name="playerLevel">Current player level used for scaling difficulty</param>
+        /// <returns>A combat encounter containing generated enemies</returns>
         private CombatEncounter GenerateCombat(Random random, int playerLevel)
         {
             int maxEnemies = 5;
@@ -65,6 +80,12 @@ namespace src.Encounters
             return new CombatEncounter(enemies);
         }
 
+        /// <summary>
+        /// Generates a random enemy type scaled to the player's level
+        /// </summary>
+        /// <param name="random">Random number generator</param>
+        /// <param name="playerLevel">Player level used to scale enemy strength</param>
+        /// <returns>A newly created enemy instance</returns>
         private Enemy GenerateEnemy(Random random, int playerLevel)
         {
             int roll = random.Next(3);
@@ -81,6 +102,12 @@ namespace src.Encounters
             }
         }
 
+        /// <summary>
+        /// Generates a weapon stand encounter containing a random selection of weapons or empty slots
+        /// Ensures that at least one weapon is available if all other slots are empty
+        /// </summary>
+        /// <param name="random">Random number generator used for weapon selection</param>
+        /// <returns>A weapon stand encounter</returns>
         private WeaponStandEncounter GenerateWeaponStand(Random random)
         {
             int maxCount = 3;
@@ -110,6 +137,11 @@ namespace src.Encounters
             return new WeaponStandEncounter(weapons);
         }
 
+        /// <summary>
+        /// Generates a random weapon instance.
+        /// </summary>
+        /// <param name="random">Random number generator</param>
+        /// <returns>A randomly selected weapon</returns>
         private Weapon GenerateWeapon(Random random)
         {
             int roll = random.Next(3);
@@ -126,16 +158,26 @@ namespace src.Encounters
             }
         }
 
+        /// <summary>
+        /// Generates a trap encounter that deals fixed damage to the player
+        /// </summary>
         private TrapEncounter GenerateTrap()
         {
             return new TrapEncounter(10);
         }
 
+        /// <summary>
+        /// Generates a healing fountain encounter that restores a fixed amount of HP
+        /// </summary>
         private HealingFountainEncounter GenerateHealingFountain()
         {
             return new HealingFountainEncounter(10);
         }
 
+        /// <summary>
+        /// Generates an item encounter where the player may find consumable items
+        /// </summary>
+        /// <param name="random">Random number generator used to select item type</param>
         private ItemEncounter GenerateItemEncounter(Random random)
         {
             int roll = random.Next(2);
@@ -148,6 +190,9 @@ namespace src.Encounters
             return new ItemEncounter(item);
         }
 
+        /// <summary>
+        /// Generates a shrine encounter where the player can choose between blessing or curse
+        /// </summary>
         private ShrineEncounter GenerateShrine()
         {
             return new ShrineEncounter();

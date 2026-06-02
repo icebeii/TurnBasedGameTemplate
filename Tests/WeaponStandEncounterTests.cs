@@ -16,6 +16,7 @@ namespace Tests
         {
             var player = new Player();
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var sword = new Sword();
             var weapons = new List<Weapon?>
@@ -37,6 +38,7 @@ namespace Tests
             var axe = new Axe();
             var prev = player.Equipment.EquipWeapon(axe);
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var sword = new Sword();
             var weapons = new List<Weapon?>
@@ -59,6 +61,7 @@ namespace Tests
             var axe = new Axe();
             var prev = player.Equipment.EquipWeapon(axe);
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var weapons = new List<Weapon?>
             {
@@ -77,6 +80,7 @@ namespace Tests
         {
             var player = new Player();
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var weapons = new List<Weapon?>
             {
@@ -97,6 +101,7 @@ namespace Tests
             var axe = new Axe();
             var prev = player.Equipment.EquipWeapon(axe);
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var sword = new Sword();
             var weapons = new List<Weapon?>
@@ -121,6 +126,7 @@ namespace Tests
             var knife = new Knife();
             var prev = player.Equipment.EquipWeapon(axe);
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var weapons = new List<Weapon?>
             {
@@ -147,6 +153,7 @@ namespace Tests
             var knife = new Knife();
             var prev = player.Equipment.EquipWeapon(axe);
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var weapons = new List<Weapon?>
             {
@@ -171,6 +178,7 @@ namespace Tests
             var sword = new Sword();
             var knife = new Knife();
             var context = new GameContext(player);
+            Output.Handler = new ConsoleOutputHandler();
 
             var weapons = new List<Weapon?>
             {

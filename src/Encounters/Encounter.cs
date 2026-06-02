@@ -7,19 +7,37 @@ using System.Collections.Generic;
 
 namespace src.Encounters
 {
+    /// <summary>
+    /// Represents a game encounter that the player can experience during the game
+    /// </summary>
     public interface IEncounter
     {
+        /// <summary>
+        /// Executes the encounter logic using the provided game context
+        /// </summary>
+        /// <param name="context">The current game context</param>
         void Execute(GameContext context);
     }
 
+    /// <summary>
+    /// Represents a combat encounter where the player fights one or more enemies
+    /// </summary>
     public class CombatEncounter : IEncounter
     {
+        /// <summary>
+        /// Gets the list of enemies participating in the encounter
+        /// </summary>
         public List<Enemy> Enemies { get; }
+
         public CombatEncounter(List<Enemy> enemies)
         {
             Enemies = enemies;
         }
 
+        /// <summary>
+        /// Executes a combat encounter, displaying enemies and starting the combat loop
+        /// </summary>
+        /// <param name="context">The current game context</param>
         public void Execute(GameContext context)
         {
             Output.Handler.WriteLine("");
@@ -32,6 +50,9 @@ namespace src.Encounters
             combat.HandleCombat(context, Enemies);
         }
 
+        /// <summary>
+        /// For each enemy in list prints its HP
+        /// </summary>
         private void PrintEnemiesHP()
         {
             for (int i = 0; i < Enemies.Count; i++)
@@ -40,6 +61,10 @@ namespace src.Encounters
             }
         }
 
+        /// <summary>
+        /// Generates a string with a list of encountered enemies
+        /// </summary>
+        /// <returns>a string with enemieas list which can be written to output</returns>
         private string EnemiesEncountered()
         {
             string output = "You encountered ";
@@ -63,8 +88,14 @@ namespace src.Encounters
         }
     }
 
+    /// <summary>
+    /// Represents an encounter where the player can inspect and equip weapons from weapon stands
+    /// </summary>
     public class WeaponStandEncounter : IEncounter
     {
+        /// <summary>
+        /// Gets the list of available weapons on the stands. A value of <c>null</c> represents an empty stand
+        /// </summary>
         public List<Weapon?> Weapons { get; }
 
         public WeaponStandEncounter(List<Weapon?> weapons)
@@ -72,6 +103,10 @@ namespace src.Encounters
             Weapons = weapons;
         }
 
+        /// <summary>
+        /// Executes the weapon stand encounter
+        /// </summary>
+        /// <param name="context">The current game context</param>
         public void Execute(GameContext context)
         {
             Output.Handler.WriteLine("");
@@ -93,6 +128,11 @@ namespace src.Encounters
             }
         }
 
+        /// <summary>
+        /// Handles equipping the new weapon and swapping with the previously equipped one
+        /// </summary>
+        /// <param name="context">The current game context</param>
+        /// <param name="index">Index of the weapon stand to interact with</param>
         public void PickWeapon(GameContext context, int index)
         {
             if (index < 0 ||  index >= Weapons.Count)
@@ -114,6 +154,9 @@ namespace src.Encounters
             Weapons[index] = previous;
         }
 
+        /// <summary>
+        /// Prints a list of proposed weapons
+        /// </summary>
         private void PrintWeaponList()
         {
             Output.Handler.WriteLine("");
@@ -133,6 +176,9 @@ namespace src.Encounters
         }
     }
 
+    /// <summary>
+    /// Represents an encounter where the player finds a consumable item
+    /// </summary>
     public class ItemEncounter : IEncounter
     {
         Consumable Item;
@@ -142,6 +188,10 @@ namespace src.Encounters
             Item = item;
         }
 
+        /// <summary>
+        /// Executes the item encounter, allowing the player to take or ignore the item
+        /// </summary>
+        /// <param name="context">The current game context</param>
         public void Execute(GameContext context)
         {
             Output.Handler.WriteLine("");
@@ -163,6 +213,11 @@ namespace src.Encounters
             }
         }
 
+        /// <summary>
+        /// Handles the item picking logic
+        /// </summary>
+        /// <param name="player">The player who takes the item</param>
+        /// <returns>A game log with information if the item was succesfully picked up or not</returns>
         private IGameLog TakeItem(Player player)
         {
             bool success = player.TakeItem(Item);
@@ -177,8 +232,14 @@ namespace src.Encounters
         }
     }
 
+    /// <summary>
+    /// Represents a trap encounter that deals immediate damage to the player.
+    /// </summary>
     public class TrapEncounter : IEncounter
     {
+        /// <summary>
+        /// Gets the amount of damage for this encounter
+        /// </summary>
         public int Damage { get; }
 
         public TrapEncounter(int damage)
@@ -186,6 +247,10 @@ namespace src.Encounters
             Damage = damage;
         }
 
+        /// <summary>
+        /// Executes the trap encounter, applying damage to the player and logging the result
+        /// </summary>
+        /// <param name="context">The current game context</param>
         public void Execute(GameContext context)
         {
             Output.Handler.WriteLine("");
@@ -198,15 +263,25 @@ namespace src.Encounters
         }
     }
 
+    /// <summary>
+    /// Represents an encounter where the player can restore health at a magical fountain
+    /// </summary>
     public class HealingFountainEncounter : IEncounter
     {
-        public int HPRestoration;
+        /// <summary>
+        /// The amount of HP restoration for this encounter
+        /// </summary>
+        public int HPRestoration { get; }
 
         public HealingFountainEncounter(int hpRestoration)
         {
             HPRestoration = hpRestoration;
         }
 
+        /// <summary>
+        /// Executes the healing fountain encounter, restoring player HP
+        /// </summary>
+        /// <param name="context">The current game context</param>
         public void Execute(GameContext context)
         {
             Output.Handler.WriteLine("");
@@ -219,10 +294,18 @@ namespace src.Encounters
         }
     }
 
+    /// <summary>
+    /// Represents a shrine encounter where the player chooses between receiving a blessing or a curse
+    /// </summary>
     public class ShrineEncounter : IEncounter
     {
         private const int Damage = 30;
         private const int Restoration = 30;
+
+        /// <summary>
+        /// Executes the shrine encounter, applying either a blessing or a curse based on player choice
+        /// </summary>
+        /// <param name="context">The current game context</param>
         public void Execute(GameContext context)
         {
             Output.Handler.WriteLine("");
