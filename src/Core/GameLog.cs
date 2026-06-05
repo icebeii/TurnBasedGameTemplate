@@ -143,7 +143,7 @@ namespace src.Core
     public class TrapEscapedLog : IGameLog
     {
         private readonly string _name;
-        private int _damage;
+        private readonly int _damage;
 
         public TrapEscapedLog(string name, int damage)
         {

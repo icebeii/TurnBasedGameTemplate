@@ -1,38 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace src.Entities
 {
     /// <summary>
     /// Represents a base enemy entity with combat stats and experience reward
     /// </summary>
-    public class Enemy : Entity
+    public abstract class Enemy : Entity
     {
         /// <summary>
-        /// Gets the amount of experience points awarded when this enemy is defeated
+        /// Gets the base stats for the enemy
         /// </summary>
-        public int XPReward;
+        protected abstract Stats BaseStats { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Enemy"/> class with specified combat attributes
+        /// Gets the per-level scaling values applied to base stats
         /// </summary>
-        /// <param name="name">The enemy name</param>
-        /// <param name="maxHealth">Maximum and starting health</param>
-        /// <param name="attack">Base attack value</param>
-        /// <param name="defense">Base defense value</param>
-        /// <param name="xpReward">Experience awarded upon defeat</param>
-        public Enemy(string name, int maxHealth, int attack, int defense, int xpReward)
+        protected abstract Stats ScalingStats { get; }
+
+        /// <summary>
+        ///  Gets the base experience reward granted when the enemy is defeated
+        /// </summary>
+        protected abstract int BaseXPReward { get; }
+
+        /// <summary>
+        /// Gets the enemy level, which determines stats and reward scaling
+        /// </summary>
+        protected int Level { get; }
+
+        /// <summary>
+        /// Gets the total experience reward granted for defeating the enemy
+        /// </summary>
+        public int XPReward => BaseXPReward * (Level + 1);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Enemy"/> class
+        /// and calculates scaled combat stats based on level
+        /// </summary>
+        /// <param name="level">The enemy level</param>
+        /// <param name="name">The display name of the enemy</param>
+        protected Enemy(int level, string name)
         {
+            Level = level;
             Name = name;
             Stats = new Stats
             {
-                MaxHealth = maxHealth,
-                CurrentHealth = maxHealth,
-                Attack = attack,
-                Defense = defense
+                MaxHealth = BaseStats.MaxHealth + level * ScalingStats.MaxHealth,
+                CurrentHealth = BaseStats.MaxHealth + level * ScalingStats.MaxHealth,
+                Attack = BaseStats.Attack + level * ScalingStats.Attack,
+                Defense = BaseStats.Defense + level * ScalingStats.Defense
             };
-            XPReward = xpReward;
         }
     }
 
@@ -41,34 +58,64 @@ namespace src.Entities
     /// </summary>
     public class Goblin : Enemy
     {
-        private const int HPPerLevel = 8;
-        private const int AttackPerLevel = 3;
-        private const int DefensePerLevel = 2;
-        public Goblin(int level) : base("Goblin", 30 + level * HPPerLevel, 
-            8 + level * AttackPerLevel, 
-            2 + level * DefensePerLevel, 
-            20 * (level + 1)) { }
+        protected override Stats BaseStats => new Stats
+        {
+            MaxHealth = 30,
+            Attack = 8,
+            Defense = 2
+        };
+
+        protected override Stats ScalingStats => new Stats
+        {
+            MaxHealth = 8,
+            Attack = 3,
+            Defense = 2
+        };
+
+        protected override int BaseXPReward => 20;
+
+        public Goblin(int level) : base(level, "Goblin") {}
     }
 
     public class Spider : Enemy
     {
-        private const int HPPerLevel = 5;
-        private const int AttackPerLevel = 10;
-        private const int DefensePerLevel = 1;
-        public Spider(int level) : base("Spider", 20 + level * HPPerLevel, 
-            10 + level * AttackPerLevel, 
-            4 + level * DefensePerLevel, 
-            40 * (level + 1)) { }
+        protected override Stats BaseStats => new Stats
+        {
+            MaxHealth = 20,
+            Attack = 10,
+            Defense = 4
+        };
+
+        protected override Stats ScalingStats => new Stats
+        {
+            MaxHealth = 5,
+            Attack = 10,
+            Defense = 1
+        };
+
+        protected override int BaseXPReward => 40;
+
+        public Spider(int level) : base(level, "Spider") {}
     }
 
     public class Skeleton : Enemy
     {
-        private const int HPPerLevel = 6;
-        private const int AttackPerLevel =6;
-        private const int DefensePerLevel = 4;
-        public Skeleton(int level) : base("Skeleton", 15 + level * HPPerLevel, 
-            12 + level * AttackPerLevel, 
-            3 + level * DefensePerLevel, 
-            30 * (level + 1)) { }
+        protected override Stats BaseStats => new Stats
+        {
+            MaxHealth = 15,
+            Attack = 12,
+            Defense = 3
+        };
+
+        protected override Stats ScalingStats => new Stats
+        {
+            MaxHealth = 6,
+            Attack = 6,
+            Defense = 4
+        };
+
+        protected override int BaseXPReward => 30;
+
+        public Skeleton(int level) : base(level, "Skeleton") {}
     }
 }

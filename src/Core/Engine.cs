@@ -10,13 +10,13 @@ namespace src.Core
     /// </summary>
     public class Engine
     {
-        private readonly GameContext _context;
-        private readonly EncounterGenerator _encounterGenerator;
+        private readonly GameContext context;
+        private readonly EncounterGenerator encounterGenerator;
         public Engine()
         {
             Player player = new Player();
-            _context = new GameContext(player);
-            _encounterGenerator = new EncounterGenerator();
+            context = new GameContext(player);
+            encounterGenerator = new EncounterGenerator();
         }
 
         /// <summary>
@@ -28,10 +28,10 @@ namespace src.Core
         {
             Output.Handler.Clear();
             Output.Handler.WriteLine("Game started!");
-            _context.Player.PrintPlayerStats();
+            context.Player.PrintPlayerStats();
             bool first = true;
 
-            while (_context.Player.IsAlive)
+            while (context.Player.IsAlive)
             {
                 if (first)
                 {
@@ -42,18 +42,18 @@ namespace src.Core
                     Output.Handler.Clear();
                 }
 
-                Output.Handler.WriteLine("Encounter #" + $"{_context.EncounterCount + 1}");
+                Output.Handler.WriteLine("Encounter #" + $"{context.EncounterCount + 1}");
 
-                IEncounter encounter = _encounterGenerator.Generate(_context);
-                encounter.Execute(_context);
-                _context.EncounterCount++;
+                IEncounter encounter = encounterGenerator.Generate(context);
+                encounter.Execute(context);
+                context.EncounterCount++;
 
                 Output.Handler.WriteLine("");
                 Output.Handler.WriteLine("Press any key to continue.");
                 Output.Handler.WaitForKey();
             }
 
-            int score = _context.EncounterCount;
+            int score = context.EncounterCount;
             HighScoreManager highScoreManager = new HighScoreManager();
             bool newHighScore = highScoreManager.SetNewScore(score);
 
@@ -65,7 +65,7 @@ namespace src.Core
                 Output.Handler.WriteLine("New high score!");
             }
             Output.Handler.WriteLine("Encounters completed: " + $"{score}");
-            Output.Handler.WriteLine("Final level: " + $"{_context.Player.Level}");
+            Output.Handler.WriteLine("Final level: " + $"{context.Player.Level}");
         }      
     }
 }
